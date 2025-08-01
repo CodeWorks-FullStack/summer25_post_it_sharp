@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS accounts(
   picture VARCHAR(255) COMMENT 'User Picture'
 ) default charset utf8mb4 COMMENT '';
 
+-- 📓ALBUMS
 CREATE TABLE albums(
 id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -26,3 +27,15 @@ accounts.*
 FROM albums
 JOIN accounts ON albums.creator_id = accounts.id
 WHERE albums.id = 4;
+
+-- 🖼️PICTURES
+CREATE TABLE pictures(
+  id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  img_url VARCHAR(500) NOT NULL,
+  creator_id VARCHAR(255) NOT NULL,
+  album_id int NOT NULL,
+  FOREIGN KEY (creator_id) REFERENCES accounts(id) ON DELETE CASCADE,
+  FOREIGN KEY (album_id) REFERENCES albums(id) ON DELETE CASCADE
+) default charset utf8mb4 COMMENT '';
