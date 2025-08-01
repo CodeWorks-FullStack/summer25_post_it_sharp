@@ -10,4 +10,7 @@ public class Album : DbItem<int>
   public bool Archived { get; set; }
   public string CreatorId { get; set; }
   public Profile Creator { get; set; }
+
+  // NOTE watcherCount, not stored in DB but counted on SELECT
+  public int watcherCount { get; set; }
 }

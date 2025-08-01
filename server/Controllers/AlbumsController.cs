@@ -8,13 +8,15 @@ public class AlbumsController : ControllerBase
 
   private readonly AlbumsService _albumsService;
   private readonly PicturesService _picturesService;
+  private readonly WatchersService _watchersService;
   private readonly Auth0Provider _auth;
 
-  public AlbumsController(AlbumsService albumsService, Auth0Provider auth, PicturesService picturesService)
+  public AlbumsController(AlbumsService albumsService, Auth0Provider auth, PicturesService picturesService, WatchersService watchersService)
   {
     _albumsService = albumsService;
     _auth = auth;
     _picturesService = picturesService;
+    _watchersService = watchersService;
   }
 
   [Authorize]
@@ -86,6 +88,20 @@ public class AlbumsController : ControllerBase
     {
       List<Picture> pictures = _picturesService.GetPicturesInAlbum(albumId);
       return Ok(pictures);
+    }
+    catch (Exception exception)
+    {
+      return BadRequest(exception.Message);
+    }
+  }
+
+  [HttpGet("{albumId}/watchers")]
+  public ActionResult<List<WatcherProfile>> GetAlbumWatchers(int albumId)
+  {
+    try
+    {
+      List<WatcherProfile> watchers = _watchersService.GetAlbumWatchers(albumId);
+      return Ok(watchers);
     }
     catch (Exception exception)
     {

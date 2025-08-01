@@ -44,9 +44,12 @@ public class AlbumsRepository
     string sql = @"
     SELECT 
         albums.*,
+        COUNT(watchers.id) AS watcherCount,
         accounts.*
     FROM albums
     JOIN accounts ON albums.creator_id = accounts.id
+    LEFT JOIN watchers ON watchers.album_id = albums.id
+    GROUP BY albums.id
     ;";
     // NOTE if using a function for you map, you do have to explicitly define the types of the Query
     //---------------------<first select, second select, return type>
@@ -59,10 +62,13 @@ public class AlbumsRepository
     string sql = @"
     SELECT 
         albums.*,
+        COUNT(watchers.id) AS watcherCount,
         accounts.*
     FROM albums
     JOIN accounts ON albums.creator_id = accounts.id
+    LEFT JOIN watchers ON watchers.album_id = albums.id
     WHERE albums.id = @albumId
+    GROUP BY albums.id
     ;";
     Album album = _db.Query<Album, Profile, Album>(sql, MapCreator, new { albumId }).SingleOrDefault();
     return album;
